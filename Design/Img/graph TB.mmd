@@ -1,0 +1,19 @@
+graph TB
+    subgraph 前端
+        A[Web界面] -->|TypeScript| B[React 18+]
+        A -->|WebRTC| C[视频采集模块]
+    end
+
+    subgraph 后端
+        D[API网关] -->|Java 17| E[Spring Boot 3]
+        E -->|gRPC| F[业务逻辑层]
+    end
+
+    subgraph AI服务
+        G[大语言模型] -->|科大讯飞大语言模型| H[版本号]
+        I[多模态分析] -->|Python 3.10| J[PyTorch 2.0]
+        J --> K[OpenCV 4.8]
+        J --> L[Librosa 0.10]
+        H -->|API| F
+        J -->|API| F
+    end

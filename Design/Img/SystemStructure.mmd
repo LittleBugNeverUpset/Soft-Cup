@@ -1,0 +1,21 @@
+graph TD
+    subgraph 前端
+        A[React 18] -->|Axios| B[Ant Design 5.x]
+        A -->|WebRTC| C[视频采集]
+    end
+
+    subgraph 后端
+        D[Spring Boot 3] -->|JWT| E[Security]
+        D -->|MyBatis| F[MySQL 8]
+        D -->|gRPC| G[FastAPI]
+    end
+
+    subgraph AI服务
+        G -->|PyTorch| H[多模态情感分析模型]
+        G -->|HTTP/2| I[科大讯飞LLM API]
+        H -->|ONNX| J[优化推理]
+    end
+
+    style A fill:#61dafb,stroke:#333
+    style D fill:#6db33f,stroke:#333
+    style G fill:#009688,stroke:#333
