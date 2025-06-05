@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.littlebug.mapper.InterviewStateMapper">
+
+    <resultMap id="BaseResultMap" type="com.littlebug.pojo.InterviewState">
+            <id property="id" column="id" />
+            <result property="interviewId" column="interview_id" />
+            <result property="fromState" column="from_state" />
+            <result property="toState" column="to_state" />
+            <result property="transitionTime" column="transition_time" />
+            <result property="operator" column="operator" />
+            <result property="contextJson" column="context_json" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,interview_id,from_state,to_state,transition_time,operator,
+        context_json
+    </sql>
+</mapper>

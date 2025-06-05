@@ -1,0 +1,30 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/interview_system
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: 797789
+      username: root
+
+
+mybatis-plus:
+  type-aliases-package: com.littlebug.pojo
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+      table-prefix: news_ # 设置表的前缀
+
+#jwt??
+jwt:
+  token:
+    tokenExpiration: 120 #????,????
+    tokenSignKey: Interview123456  #???????? ???
+swagger:
+  enabled: true

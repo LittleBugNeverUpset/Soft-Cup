@@ -1,0 +1,29 @@
+server:
+  #?????
+  port: 8081 #?????8080
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://localhost:3306/metest?serverTimezone=UTC&userUnicode=true&characterEncoding=utf-8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: 797789
+      username: root
+
+# ??mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+mybatis-plus:
+  type-aliases-package: com.littlebug.pojo
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #??????
+      id-type: auto #???????
+      table-prefix: news_ # ??????
+
+#jwt??
+jwt:
+  token:
+    tokenExpiration: 120 #????,????
+    tokenSignKey:   #???????? ???
