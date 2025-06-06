@@ -3,12 +3,14 @@ package com.littlebug.service;
 import com.littlebug.pojo.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.littlebug.utils.Result;
+import org.springframework.stereotype.Service;
 
 /**
 * @author 种昊阳
 * @description 针对表【student(学生信息表)】的数据库操作Service
 * @createDate 2025-06-05 13:36:52
 */
+//@Service
 public interface StudentService extends IService<Student> {
 
     /**
@@ -36,4 +38,10 @@ public interface StudentService extends IService<Student> {
      *    4. 失败,判断账号还是密码错误,封装对应的枚举错误即可
      */
     Result login(Student student);
+
+    Result checkStudentNo(String stNo);
+
+    Result regist(Student student);
+
+    Result getStudentInfo(String token);
 }

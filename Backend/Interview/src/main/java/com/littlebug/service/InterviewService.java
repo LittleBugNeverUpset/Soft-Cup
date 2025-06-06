@@ -2,6 +2,7 @@ package com.littlebug.service;
 
 import com.littlebug.pojo.Interview;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.littlebug.utils.Result;
 
 /**
 * @author 种昊阳
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface InterviewService extends IService<Interview> {
 
+    Result init(String token, Integer positionType);
 }

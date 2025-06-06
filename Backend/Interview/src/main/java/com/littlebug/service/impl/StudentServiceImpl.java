@@ -13,6 +13,8 @@ import com.littlebug.utils.Result;
 import com.littlebug.utils.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +57,57 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         return Result.build(null,ResultCodeEnum.PASSWORD_ERROR);
 
     }
+
+    @Override
+    public Result checkStudentNo(String stNo) {
+        LambdaQueryWrapper<Student>queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Student::getStudentNo,stNo);
+        Student loginStudent = studentMapper.selectOne(queryWrapper);
+        if (loginStudent != null) {
+            return  Result.build(null, ResultCodeEnum.STUDENTNUMBER_EXIST);
+        }
+        return  Result.ok(null);
+    }
+
+    @Override
+    public Result regist(Student student) {
+        LambdaQueryWrapper<Student> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Student::getStudentNo,student.getStudentNo());
+        Long count = studentMapper.selectCount(queryWrapper);
+        if(count > 0) {
+            return  Result.build(null, ResultCodeEnum.STUDENTNUMBER_EXIST);
+        }
+        student.setEncryptedPwd(MD5Util.encrypt(student.getEncryptedPwd()));
+        int rows = studentMapper.insert((student));
+        return  Result.ok(null);
+//        return null;
+    }
+
+    @Override
+    public Result getStudentInfo(String token) {
+        //1.判定是否有效期
+        if (jwtHelper.isExpiration(token)) {
+            //true过期,直接返回未登录
+            return Result.build(null,ResultCodeEnum.NOTLOGIN);
+        }
+
+        //2.获取token对应的用户
+        int studentId = jwtHelper.getUserId(token).intValue();
+
+        //3.查询数据
+        Student student = studentMapper.selectById(studentId);
+
+        if (student != null) {
+            student.setEncryptedPwd(null);
+            Map data = new HashMap();
+            data.put("loginStudent",student);
+            return Result.ok(data);
+        }
+
+        return Result.build(null,ResultCodeEnum.NOTLOGIN);
+    }
+
+
 }
 
 

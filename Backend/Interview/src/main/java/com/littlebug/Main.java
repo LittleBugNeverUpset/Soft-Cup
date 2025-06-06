@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.littlebug", "com.littlebug.service"}) // 明确指定要扫描的包
 @MapperScan("com.littlebug.mapper")
 @ComponentScan(basePackages = {"com.littlebug.controller", "com.littlebug.config"})
 public class Main {
