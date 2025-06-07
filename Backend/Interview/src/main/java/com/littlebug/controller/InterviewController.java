@@ -20,15 +20,21 @@ public class InterviewController {
 
 
     @PostMapping("init")
-    public Result InitInterview(@RequestHeader String token , @RequestParam  Integer positionType ) {
-        // 暂定题目中的四种领域（i = 0.人工智能、1.大数据、2.物联网、3.智能系统）三种岗位（j = 0.技术岗、1.运维测试岗、2.产品岗）
-        //positionType = i * 4 + j;
-        Result  result = interviewService.init(token ,positionType);
+    public Result InitInterview(@RequestHeader String token , @RequestParam  Integer position ) {
+        // 暂定题目中的四种领域 positionType（i = 0.人工智能、1.大数据、2.物联网、3.智能系统）三种岗位positionName（j = 0.技术岗、1.运维测试岗、2.产品岗）
+        //position = positionType * 4 + PositionName;
+        Result  result = interviewService.init(token ,position);
         System.out.println("result = " + result);
         return result;
-
     }
-//
+    //先检查有没有初始化好的面试，没有就报错。有了更新开始时间
+    @PostMapping("start")
+    public Result StartInterview(@RequestHeader String token){
+        Result  result = interviewService.start(token);
+        System.out.println("result = " + result);
+        return result;
+    }
+    //
 //    @GetMapping("/{id}/current-question")
 //    public Response<QuestionDTO> getCurrentQuestion(
 //            @PathVariable Long id) {

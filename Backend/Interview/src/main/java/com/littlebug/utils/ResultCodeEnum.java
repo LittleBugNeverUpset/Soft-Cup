@@ -13,7 +13,8 @@ public enum ResultCodeEnum {
     PASSWORD_ERROR(503,"passwordError"),
     NOTLOGIN(504,"notLogin"),
     STUDENTNUMBER_EXIST(505,"StudentNumberExisted"),
-    PARAM_ERROR(505,"Invilid Param");
+    PARAM_ERROR(505,"Invilid Param"),
+    PROCESS_ERROR(506,"Process Error");
     private Integer code;
     private String message;
     private ResultCodeEnum(Integer code, String message) {

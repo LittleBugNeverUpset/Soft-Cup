@@ -11,5 +11,7 @@ import com.littlebug.utils.Result;
 */
 public interface InterviewService extends IService<Interview> {
 
-    Result init(String token, Integer positionType);
+    Result init(String token, Integer position);
+
+    Result start(String token);
 }
