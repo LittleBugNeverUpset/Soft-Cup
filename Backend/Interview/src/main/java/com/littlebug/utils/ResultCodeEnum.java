@@ -9,12 +9,12 @@ import org.apache.ibatis.annotations.Param;
 public enum ResultCodeEnum {
 
     SUCCESS(200,"success"),
-    STUDENT_NUMBER_NOT_EXIST(501,"studentNumberNotExist"),
-    PASSWORD_ERROR(503,"passwordError"),
-    NOTLOGIN(504,"notLogin"),
-    STUDENTNUMBER_EXIST(505,"StudentNumberExisted"),
-    PARAM_ERROR(505,"Invilid Param"),
-    PROCESS_ERROR(506,"Process Error");
+    USERNAME_EXIST(501,"user name existed"),
+    USERNAME_ERROR(502,"user name not existed"),
+    PASSWORD_ERROR(503,"user password error" ),
+    NOTLOGIN(504, "not log in"),
+    USERNAME_USED(505, "user name used"),
+    PROCESS_ERROR(506, "process error");
     private Integer code;
     private String message;
     private ResultCodeEnum(Integer code, String message) {

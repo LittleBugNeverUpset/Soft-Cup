@@ -4,6 +4,12 @@ server:
     context-path: /
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB        # 单个文件最大大小
+      max-request-size: 100MB     # 单次请求最大大小
+      enabled: true               # 启用文件上传
+      file-size-threshold: 0      # 内存中文件阈值
   datasource:
     url: jdbc:mysql://localhost:3306/interview_system?useUnicode=true&characterEncoding=UTF-8
     type: com.alibaba.druid.pool.DruidDataSource
@@ -13,6 +19,10 @@ spring:
     druid:
       initial-size: 5
       max-active: 20
+
+ffmpeg:
+#  path: /usr/local/bin/ffmpeg  # Linux/macOS
+   path: D:\\Program File (x86)\\ffmpeg\\bin\\ffmpeg.exe  # Windows
 
 
 

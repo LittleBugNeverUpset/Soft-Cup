@@ -8,22 +8,20 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName interview
+ * @TableName user
  */
-@TableName(value ="interview")
+@TableName(value ="user")
 @Data
-public class Interview {
+public class User {
     private Long id;
 
-    private Long userId;
+    private String username;
 
-    private String positionType;
+    private String passwordHash;
 
-    private Object status;
+    private String email;
 
-    private Integer currentQuestionSeq;
+    private Object role;
 
     private Date createdAt;
-
-    private Date updatedAt;
 }

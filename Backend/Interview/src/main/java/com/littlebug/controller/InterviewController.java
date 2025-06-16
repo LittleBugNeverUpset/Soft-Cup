@@ -1,56 +1,51 @@
 package com.littlebug.controller;
 
 import com.littlebug.service.InterviewService;
-import com.littlebug.service.StudentService;
+import com.littlebug.service.UserService;
 import com.littlebug.utils.Result;
 import jakarta.validation.Valid;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 // 面试控制器示例
 @RestController
 @RequestMapping("/api/interviews")
 public class InterviewController {
-
     @Autowired
-    private StudentService studentService;
+    private UserService userService;
     @Autowired
     private InterviewService interviewService;
-
-
-    @PostMapping("init")
-    public Result InitInterview(@RequestHeader String token , @RequestParam  Integer position ) {
-        // 暂定题目中的四种领域 positionType（i = 0.人工智能、1.大数据、2.物联网、3.智能系统）三种岗位positionName（j = 0.技术岗、1.运维测试岗、2.产品岗）
-        //position = positionType * 4 + PositionName;
-        Result  result = interviewService.init(token ,position);
-        System.out.println("result = " + result);
+    // 创建面试记录
+    @PostMapping("create")
+    public Result createInterview(@RequestHeader String token, @RequestParam String position){
+        Result result =interviewService.createInterview(token, position);
         return result;
     }
-    //先检查有没有初始化好的面试，没有就报错。有了更新开始时间
+    // 面试开始
     @PostMapping("start")
-    public Result StartInterview(@RequestHeader String token){
-        Result  result = interviewService.start(token);
-        System.out.println("result = " + result);
+    public Result startinterview(@RequestHeader String token){
+        Result result =interviewService.startInterview(token);
         return result;
     }
-    //
-//    @GetMapping("/{id}/current-question")
-//    public Response<QuestionDTO> getCurrentQuestion(
-//            @PathVariable Long id) {
-//        // 实现逻辑
+    // AI出题
+    @GetMapping("question")
+    public Result getQuestion(@RequestHeader String token){
+        Result result =interviewService.generateInterviewQuestion(token);
+        return result;
+    }
+    // 回答问题
+    @PostMapping("question")
+    public Result answerQuestion(@RequestHeader String token, @RequestParam("videoFile") MultipartFile videoFile){
+        Result result =interviewService.answerInterviewquestion(token, videoFile);
+        return result;
+    }
+//    @PostMapping("complete")
+//    public Result completeInterview(@RequestHeader String token, @RequestParam String position){
+//        Result result =interviewService.completeInterview(token, position);
+//        return result;
 //    }
-//
-//    @PostMapping("/{id}/answers")
-//    public Response<Void> submitAnswer(
-//            @PathVariable Long id,
-//            @RequestBody AnswerSubmission request) {
-//        // 实现逻辑
-//    }
-//
-//    @GetMapping("/{id}/report")
-//    public Response<ReportDTO> getReport(
-//            @PathVariable Long id) {
-//        // 实现逻辑
-//    }
+
+
 }

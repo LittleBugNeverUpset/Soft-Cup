@@ -17,13 +17,7 @@ public class InterviewState {
 
     private Long interviewId;
 
-    private Integer fromState;
+    private String state;
 
-    private Integer toState;
-
-    private Date transitionTime;
-
-    private String operator;
-
-    private String contextJson;
+    private Date createdAt;
 }

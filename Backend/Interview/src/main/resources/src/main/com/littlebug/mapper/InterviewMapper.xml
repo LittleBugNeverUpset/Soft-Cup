@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.littlebug.mapper.InterviewMapper">
+<mapper namespace="src/main/com/littlebug.mapper.InterviewMapper">
 
-    <resultMap id="BaseResultMap" type="com.littlebug.pojo.Interview">
+    <resultMap id="BaseResultMap" type="src/main/com/littlebug.pojo.Interview">
             <id property="id" column="id" />
             <result property="userId" column="user_id" />
             <result property="positionType" column="position_type" />
