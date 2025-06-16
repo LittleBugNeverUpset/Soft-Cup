@@ -2,23 +2,16 @@ package com.littlebug.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.littlebug.pojo.EmotionAnalysisResponse;
 import com.littlebug.pojo.Interview;
 import com.littlebug.service.InterviewService;
 import com.littlebug.mapper.InterviewMapper;
 import com.littlebug.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
-
-import static com.littlebug.utils.AudioExtractor.extractAudioToMp3;
 
 /**
 * @author 种昊阳
@@ -32,11 +25,10 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
     private JwtHelper jwtHelper;
     @Autowired
     private InterviewMapper interviewMapper;
-    @Autowired
-    private VideoToMp3Service videoToMp3Service;
+
 
     @Autowired
-    private AudioAnalysisService audioAnalysisService;
+    private ApiService apiService;
 
     @Override
     public Result createInterview(String token, String position) {
@@ -107,32 +99,26 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
         queryWrapper.eq(Interview::getUserId, userId);
         queryWrapper.eq(Interview::getStatus, "started");
         Interview interview = interviewMapper.selectOne(queryWrapper);
+
         if (interview != null) {
-            try {
-                File mp3File = null;
+            if(videoFile != null){
                 try {
-                    // 1. 转换为MP3
-                    mp3File = videoToMp3Service.convertToMp3(videoFile);
-
-                    // 2. 调用分析服务
-                    AudioAnalysisService.AudioAnalysisResult result = audioAnalysisService.analyzeAudio(mp3File);
-
-                    return Result.ok(result);
-
+                    MultipartFile mp3File = VideoToMp3Converter.extractMp3FromVideo(videoFile);
+                    // 处理返回的 MP3 文件...
+                    String ans = apiService.callThirdPartyApiWithAudio(mp3File);
+                    return  Result.ok(ans);
                 } catch (Exception e) {
-                    return Result.build(e.getMessage(),ResultCodeEnum.PROCESS_ERROR);
-                } finally {
-                    // 3. 确保删除临时文件
-                    if (mp3File != null && mp3File.exists()) {
-                        mp3File.delete();
-                    }
+                    return  Result.build(e.getMessage(),ResultCodeEnum.PROCESS_ERROR);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return Result.build("Video Handle Error", ResultCodeEnum.PROCESS_ERROR);
             }
+            else{
+                return  Result.build("Video  Is Empty", ResultCodeEnum.PROCESS_ERROR);
+            }
+        } else {
+            return  Result.build("Started Interview Not Exist",ResultCodeEnum.PROCESS_ERROR);
+
         }
-        return  Result.build("Started Interview Not Exist",ResultCodeEnum.PROCESS_ERROR);
+
     }
 }
 
