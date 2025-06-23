@@ -2,7 +2,10 @@ package com.littlebug.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.littlebug.pojo.AnalysisResponse;
 import com.littlebug.pojo.Interview;
+//import com.littlebug.pojo.InterviewDocument;
 import com.littlebug.service.InterviewService;
 import com.littlebug.mapper.InterviewMapper;
 import com.littlebug.utils.*;
@@ -10,21 +13,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Date;
 
 /**
-* @author 种昊阳
-* @description 针对表【interview】的数据库操作Service实现
-* @createDate 2025-06-14 12:13:52
-*/
+ * @author 种昊阳
+ * @description 针对表【interview】的数据库操作Service实现
+ * @createDate 2025-06-14 12:13:52
+ */
 @Service
 public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview>
-    implements InterviewService{
+        implements InterviewService{
     @Autowired
     private JwtHelper jwtHelper;
     @Autowired
     private InterviewMapper interviewMapper;
+
 
 
     @Autowired
@@ -43,14 +46,32 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
         if(count > 0) {
             return Result.build("Unfinished interview existing",ResultCodeEnum.PROCESS_ERROR);
         }
-
         Interview interview = new Interview();
         interview.setPositionType(position);
         interview.setCreatedAt(new Date());
         interview.setCurrentQuestionSeq(0);
         interview.setUserId((long)userId);
         int rows = interviewMapper.insert(interview);
-        return Result.ok("Inster In to row :" + rows);
+        //mongodb创建文档，并插入数据库
+        try{
+//            LambdaQueryWrapper<Interview> queryWrapper2 = new LambdaQueryWrapper<>();
+//            queryWrapper2.eq(Interview::getUserId,userId);
+//            queryWrapper2.eq(Interview::getStatus,"created");
+//            interview = interviewMapper.selectOne(queryWrapper2);
+//            InterviewDocument interviewDocument = new InterviewDocument();
+//            interviewDocument.setStudentId(userId);
+//            interviewDocument.setInterviewId(interview.getId());
+//            interviewDocument.setCreatedAt(new Date());
+//            interviewDocument.setUpdatedAt(new Date());
+//            interviewDocument.setStatus("created");
+//            interviewDocument.setPositionType(position);
+//            interviewDocumentRepositoryService.save(interviewDocument);
+            return Result.ok("Inster In to row :" + rows);
+        }
+        catch (Exception e){
+            return  Result.build(e.getMessage(),ResultCodeEnum.PROCESS_ERROR);
+        }
+
 
     }
 
@@ -105,8 +126,10 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
                 try {
                     MultipartFile mp3File = VideoToMp3Converter.extractMp3FromVideo(videoFile);
                     // 处理返回的 MP3 文件...
-                    String ans = apiService.callThirdPartyApiWithAudio(mp3File);
-                    return  Result.ok(ans);
+
+                    AnalysisResponse ans = apiService.callThirdPartyApiWithAudio(mp3File);
+                    System.out.println("反序列化结果: " + new ObjectMapper().writeValueAsString(ans));
+                    return  Result.ok(ans.getData());
                 } catch (Exception e) {
                     return  Result.build(e.getMessage(),ResultCodeEnum.PROCESS_ERROR);
                 }
