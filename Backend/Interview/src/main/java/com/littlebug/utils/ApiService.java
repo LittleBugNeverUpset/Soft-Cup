@@ -1,7 +1,7 @@
 package com.littlebug.utils;
 
 
-import com.littlebug.pojo.AnalysisResponse;
+import com.littlebug.pojo.VoiceEmotionAnalysisResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class ApiService {
     @Value("${third.party.api.url}")
     private String apiUrl;
 
-    public AnalysisResponse callThirdPartyApiWithAudio(MultipartFile audioFile) throws IOException {
+    public VoiceEmotionAnalysisResponse callThirdPartyApiWithAudio(MultipartFile audioFile) throws IOException {
         // 创建RestTemplate实例（保持原有方式）
         RestTemplate restTemplate = new RestTemplate();
 
@@ -39,11 +39,11 @@ public class ApiService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         // 发送请求并直接映射到AnalysisResponse
-        ResponseEntity<AnalysisResponse> response = restTemplate.exchange(
+        ResponseEntity<VoiceEmotionAnalysisResponse> response = restTemplate.exchange(
                 apiUrl,
                 HttpMethod.POST,
                 requestEntity,
-                AnalysisResponse.class
+                VoiceEmotionAnalysisResponse.class
         );
 
         // 处理响应

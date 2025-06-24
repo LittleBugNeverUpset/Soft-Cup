@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class AnalysisResponse {
+public class VoiceEmotionAnalysisResponse {
     private boolean success;
     private String message;
 

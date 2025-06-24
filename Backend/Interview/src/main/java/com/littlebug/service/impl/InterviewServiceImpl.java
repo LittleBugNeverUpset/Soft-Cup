@@ -3,13 +3,17 @@ package com.littlebug.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.littlebug.pojo.AnalysisResponse;
+import com.littlebug.pojo.VoiceEmotionAnalysisResponse;
 import com.littlebug.pojo.Interview;
-//import com.littlebug.pojo.InterviewDocument;
+import com.littlebug.pojo.InterviewDocument;
 import com.littlebug.service.InterviewService;
 import com.littlebug.mapper.InterviewMapper;
 import com.littlebug.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +31,8 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
     private JwtHelper jwtHelper;
     @Autowired
     private InterviewMapper interviewMapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
 
 
@@ -54,18 +60,18 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
         int rows = interviewMapper.insert(interview);
         //mongodb创建文档，并插入数据库
         try{
-//            LambdaQueryWrapper<Interview> queryWrapper2 = new LambdaQueryWrapper<>();
-//            queryWrapper2.eq(Interview::getUserId,userId);
-//            queryWrapper2.eq(Interview::getStatus,"created");
-//            interview = interviewMapper.selectOne(queryWrapper2);
-//            InterviewDocument interviewDocument = new InterviewDocument();
-//            interviewDocument.setStudentId(userId);
-//            interviewDocument.setInterviewId(interview.getId());
-//            interviewDocument.setCreatedAt(new Date());
-//            interviewDocument.setUpdatedAt(new Date());
-//            interviewDocument.setStatus("created");
-//            interviewDocument.setPositionType(position);
-//            interviewDocumentRepositoryService.save(interviewDocument);
+            LambdaQueryWrapper<Interview> queryWrapper2 = new LambdaQueryWrapper<>();
+            queryWrapper2.eq(Interview::getUserId,userId);
+            queryWrapper2.eq(Interview::getStatus,"created");
+            interview = interviewMapper.selectOne(queryWrapper2);
+            InterviewDocument interviewDocument = new InterviewDocument();
+            interviewDocument.setStudentId(userId);
+            interviewDocument.setInterviewId(interview.getId());
+            interviewDocument.setCreatedAt(new Date());
+            interviewDocument.setUpdatedAt(new Date());
+            interviewDocument.setStatus("created");
+            interviewDocument.setPositionType(position);
+            mongoTemplate.insert(interviewDocument);
             return Result.ok("Inster In to row :" + rows);
         }
         catch (Exception e){
@@ -84,11 +90,23 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
         queryWrapper.eq(Interview::getUserId,userId);
         queryWrapper.eq(Interview::getStatus,"created");
         Interview interview = interviewMapper.selectOne(queryWrapper);
+
         if( interview != null) {
-            interview.setStatus("started");
-            interview.setUpdatedAt(new Date());
-            interviewMapper.updateById(interview);
-            return  Result.ok("Interview Started At " + new Date());
+            try{
+                interview.setStatus("started");
+                interview.setUpdatedAt(new Date());
+                interviewMapper.updateById(interview);
+                //mongodb更新字段
+                Query query = new Query(Criteria.where("interviewId").is(interview.getId()));
+                Update update = new Update().set("status", "started");
+                update.set("updateAt" ,new Date());
+                mongoTemplate.updateFirst(query, update, InterviewDocument.class);
+                return  Result.ok("Interview Started At " + new Date());
+
+            }catch (Exception e) {
+                return Result.build(e.getMessage(),ResultCodeEnum.PROCESS_ERROR);
+            }
+
         }
         return Result.build("Created Interview Not Exist",ResultCodeEnum.PROCESS_ERROR);
     }
@@ -127,7 +145,7 @@ public class InterviewServiceImpl extends ServiceImpl<InterviewMapper, Interview
                     MultipartFile mp3File = VideoToMp3Converter.extractMp3FromVideo(videoFile);
                     // 处理返回的 MP3 文件...
 
-                    AnalysisResponse ans = apiService.callThirdPartyApiWithAudio(mp3File);
+                    VoiceEmotionAnalysisResponse ans = apiService.callThirdPartyApiWithAudio(mp3File);
                     System.out.println("反序列化结果: " + new ObjectMapper().writeValueAsString(ans));
                     return  Result.ok(ans.getData());
                 } catch (Exception e) {
