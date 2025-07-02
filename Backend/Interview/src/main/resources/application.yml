@@ -11,6 +11,7 @@ spring:
       enabled: true               # 启用文件上传
       file-size-threshold: 0      # 内存中文件阈值
   datasource:
+    # 替换自己的mysql配置
     url: jdbc:mysql://localhost:3306/interview_system?useUnicode=true&characterEncoding=UTF-8
     type: com.alibaba.druid.pool.DruidDataSource
     password: 797789
@@ -20,6 +21,7 @@ spring:
       initial-size: 5
       max-active: 20
   data:
+    #替换自己的mongodb配置
     mongodb:
       uri: mongodb://localhost:27017/interview_system
 
