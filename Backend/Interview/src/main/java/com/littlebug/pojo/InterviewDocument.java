@@ -26,9 +26,10 @@ public class InterviewDocument {
     @Field("student_id")
     private int studentId;
 
+
     private String positionType;
     private String status;
-
+    private String matchingMessage;
     @Field("created_at")
     private Date createdAt;
 

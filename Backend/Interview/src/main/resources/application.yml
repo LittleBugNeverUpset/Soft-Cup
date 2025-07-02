@@ -26,9 +26,13 @@ spring:
 third:
   party:
     api:
-      url: http://localhost:5000/analyze
-
-
+      videoToVoiceUrl: http://localhost:5000/analyze
+      toTxtUpload: https://raasr.xfyun.cn/v2/api/upload
+      matchingAnalyzeUrl: http://localhost:8000/
+      uploadFileUrl: http://localhost:8000/upload
+      getInitQuestionUrl: http://localhost:8000/api/interview/start
+      getNextQuestionUrl: http://localhost:8000/api/interview/answer
+      summeryInterviewUrl: http://localhost:8000/api/interview/end
 
 
 mybatis-plus:

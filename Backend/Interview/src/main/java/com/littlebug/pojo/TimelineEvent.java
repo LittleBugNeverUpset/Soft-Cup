@@ -18,7 +18,7 @@ public class TimelineEvent {
     private Date timestamp;
 
     // 使用具体类型替代Object
-    private Map<String, Object> metadata;
+//    private Map<String, Object> metadata;
 
     private String content;
 }

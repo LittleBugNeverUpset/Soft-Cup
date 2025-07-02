@@ -18,10 +18,10 @@ public class Question {
 
     private String content;
 
-    @Field("question_type")
-    private String questionType;
+//    @Field("question_type")
+//    private String questionType;
 
-    private Integer difficulty;
+//    private Integer difficulty;
 
     private List<Answer> answers = new ArrayList<>();
 }

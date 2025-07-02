@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.littlebug.utils.Result;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 /**
 * @author 种昊阳
 * @description 针对表【interview】的数据库操作Service
@@ -12,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 */
 public interface InterviewService extends IService<Interview> {
 
-    Result createInterview(String token, String position);
+    Result createInterview(String token, String position ,MultipartFile PdfFile, MultipartFile TxtFile) throws IOException;
 
     Result startInterview(String token);
 
