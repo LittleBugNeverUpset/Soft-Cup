@@ -41,4 +41,5 @@ public class InterviewDocument {
 
     @Field("current_question")
     private Integer currentQuestion;
+    private String summery;
 }

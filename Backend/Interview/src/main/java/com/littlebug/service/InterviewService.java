@@ -18,7 +18,9 @@ public interface InterviewService extends IService<Interview> {
 
     Result startInterview(String token);
 
-    Result generateInterviewQuestion(String token);
+    Result generateInterviewQuestion(String token) throws IOException;
 
-    Result answerInterviewquestion(String token, MultipartFile videoFile);
+    Result answerInterviewquestion(String token, MultipartFile videoFile,String answer);
+
+    Result completeInterview(String token) throws IOException;
 }

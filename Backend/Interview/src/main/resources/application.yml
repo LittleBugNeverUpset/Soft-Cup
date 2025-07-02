@@ -30,7 +30,7 @@ third:
     api:
       videoToVoiceUrl: http://localhost:5000/analyze
       toTxtUpload: https://raasr.xfyun.cn/v2/api/upload
-      matchingAnalyzeUrl: http://localhost:8000/
+      matchingAnalyzeUrl: http://localhost:8000/api/match/analyze
       uploadFileUrl: http://localhost:8000/upload
       getInitQuestionUrl: http://localhost:8000/api/interview/start
       getNextQuestionUrl: http://localhost:8000/api/interview/answer

@@ -41,21 +41,23 @@ public class InterviewController {
     }
     // AI出题
     @GetMapping("question")
-    public Result getQuestion(@RequestHeader String token){
+    public Result getQuestion(@RequestHeader String token) throws IOException {
         Result result =interviewService.generateInterviewQuestion(token);
         return result;
     }
     // 回答问题
-    @PostMapping("question")
-    public Result answerQuestion(@RequestHeader String token, @RequestParam("videoFile") MultipartFile videoFile){
-        Result result =interviewService.answerInterviewquestion(token, videoFile);
+    @PostMapping(value ="question",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result answerQuestion(@RequestHeader String token,
+                                 @RequestPart("videoFile") MultipartFile videoFile,
+                                 @RequestParam String answer){
+        Result result =interviewService.answerInterviewquestion(token, videoFile, answer);
         return result;
     }
-//    @PostMapping("complete")
-//    public Result completeInterview(@RequestHeader String token, @RequestParam String position){
-//        Result result =interviewService.completeInterview(token, position);
-//        return result;
-//    }
+    @PostMapping("complete")
+    public Result completeInterview(@RequestHeader String token, @RequestParam String position) throws IOException {
+        Result result =interviewService.completeInterview(token);
+        return result;
+    }
 
 
 }

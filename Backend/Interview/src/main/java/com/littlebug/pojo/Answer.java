@@ -1,15 +1,16 @@
 package com.littlebug.pojo;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.List;
 import com.littlebug.pojo.VoiceEmotionAnalysisResponse;
 @Document(collection = "answers")
+@Data
 public class Answer {
     @Id
     private String id;
-
     // 必需字段
     private String text;  // 回答文本内容
     // 分析结果相关字段
@@ -26,8 +27,11 @@ public class Answer {
 
     }
 
-
-
-
-
+    public Answer(String id, String text, VoiceEmotionAnalysisResponse voiceEmotionAnalysisResponse, Date createTime, String questionId) {
+        this.id = id;
+        this.text = text;
+        this.voiceEmotionAnalysisResponse = voiceEmotionAnalysisResponse;
+        this.createTime = createTime;
+        this.questionId = questionId;
+    }
 }

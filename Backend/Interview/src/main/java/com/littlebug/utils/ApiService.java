@@ -122,7 +122,7 @@ public class ApiService {
         // 发送GET请求（假设是无参数的GET请求）
         ResponseEntity<String> response = restTemplate.exchange(
                 matrchingAnalizeUrl,
-                HttpMethod.GET,
+                HttpMethod.POST,
                 requestEntity,
                 String.class
         );
@@ -171,7 +171,7 @@ public class ApiService {
     //获取下一个问题
     @Value("${third.party.api.getNextQuestionUrl}")
     private String getNextQuestionUrl;
-    public String getNextQuestion(String Sesstion_id, String message) throws IOException {
+    public String getNextQuestion(String session_id, String message) throws IOException {
         // 创建RestTemplate实例
         RestTemplate restTemplate = new RestTemplate();
 
@@ -179,17 +179,18 @@ public class ApiService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // 构建请求URL（路径参数）
-        String url = getNextQuestionUrl + "/" +  Sesstion_id;
+        // 构建请求URL（不再包含session_id作为路径参数）
+        String url = getNextQuestionUrl;
 
-        // 创建请求体（包含message）
+        // 创建请求体（包含session_id和message）
         Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("session_id", session_id);
         requestBody.put("message", message);
 
         // 创建请求实体（包含请求体和请求头）
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        // 发送POST请求（假设是POST方法）
+        // 发送POST请求
         ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
@@ -202,6 +203,38 @@ public class ApiService {
             return response.getBody();
         } else {
             throw new IOException("获取下一个问题API请求失败，状态码: " + response.getStatusCode());
+        }
+    }
+
+    @Value("${third.party.api.summeryInterviewUrl}")
+    private  String summeryInterviewUrl;
+    public String summeryInterview (String Session_id) throws IOException {
+        // 创建RestTemplate实例
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // 构建带查询参数的URL
+        String url = summeryInterviewUrl + "/" + Session_id;
+
+        // 创建请求实体
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        // 发送POST请求
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        // 处理响应
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        } else {
+            throw new IOException("获取初始问题API请求失败，状态码: " + response.getStatusCode());
         }
     }
 }

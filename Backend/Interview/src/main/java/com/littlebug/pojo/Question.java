@@ -17,7 +17,7 @@ public class Question {
     private Integer questionSeq;
 
     private String content;
-
+    private  Integer answerId;
 //    @Field("question_type")
 //    private String questionType;
 
