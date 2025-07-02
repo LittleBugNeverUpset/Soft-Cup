@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.mirrors.ustc.edu.cn/simple/"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+torch = ">=2.0.0"
+torchaudio = ">=2.0.0"
+transformers = ">=4.30.0"
+librosa = ">=0.9.0"
+soundfile = ">=0.12.1"
+scipy = ">=1.7.0"
+datasets = ">=2.0.0"
+flask = ">=2.2.0"
+flask-cors = ">=4.0.0"
+gunicorn = ">=20.0.0"
+requests = "==2.32.3"
+langchain = "==0.3.25"
+langchain-community = "==0.3.24"
+fastapi = "==0.115.6"
+uvicorn = "==0.34.0"
+pydantic = "==2.10.4"
+numpy = "==1.26.4"
+pandas = "==2.2.3"
+pypdf2 = "==3.0.1"
+pymupdf = "==1.24.13"
+chromadb = "==0.5.23"
+sentence-transformers = "==3.3.1"
+tiktoken = "==0.8.0"
+python-multipart = "==0.0.9"
+scikit-learn = "==1.5.2"
+websocket-client = "==1.8.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
