@@ -41,18 +41,62 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok(null);
     }
 
-    @Override
-    public Result regist(User user) {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername,user.getUsername());
-        Long count = userMapper.selectCount(queryWrapper);
 
-        if (count > 0){
-            return Result.build(null,ResultCodeEnum.USERNAME_USED);
+    public Result regist(User user) {
+        // 验证用户名
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            return Result.build("Username Empty", ResultCodeEnum.USERNAME_ERROR);
+        }
+        if (user.getUsername().length() < 2) {
+            return Result.build("Username Too Short", ResultCodeEnum.USERNAME_ERROR);
+        }
+        if (user.getUsername().matches(".*\\d.*")) {
+            return Result.build("Username Contains Digit", ResultCodeEnum.USERNAME_ERROR);
         }
 
+        // 验证密码
+        String password = user.getPasswordHash();
+        if (password == null || password.length() < 8) {
+            return Result.build("Password Too Short", ResultCodeEnum.PASSWORD_UNQUALIFY);
+        }
+        boolean hasDigit = false;
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasSpecial = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else if (Character.isUpperCase(c)) {
+                hasUpper = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLower = true;
+            } else if (c == '$' || c == '#' || c == '@') {
+                hasSpecial = true;
+            }
+        }
+        if (!hasDigit || !(hasUpper || hasLower || hasSpecial)) {
+            return Result.build("Password Weak", ResultCodeEnum.PASSWORD_UNQUALIFY);
+        }
+
+        // 验证学号（假设学号存储在email字段中）
+        String studentId = user.getEmail();
+        if (studentId == null || !studentId.matches("^[1-9]\\d{7}$")) {
+            return Result.build("Invalid Student Id", ResultCodeEnum.STUDEN_ID_UNQUALIFY);
+        }
+
+        // 检查用户名是否已存在
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, user.getUsername());
+        Long count = userMapper.selectCount(queryWrapper);
+        if (count > 0) {
+            return Result.build(null, ResultCodeEnum.USERNAME_USED);
+        }
+
+        // 加密密码并设置角色
         user.setPasswordHash(MD5Util.encrypt(user.getPasswordHash()));
         user.setRole("student");
+
+        // 插入用户
         int rows = userMapper.insert(user);
         System.out.println("rows = " + rows);
         return Result.ok(null);

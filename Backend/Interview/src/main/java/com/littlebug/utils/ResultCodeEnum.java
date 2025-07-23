@@ -10,11 +10,13 @@ public enum ResultCodeEnum {
 
     SUCCESS(200,"success"),
     USERNAME_EXIST(501,"user name existed"),
-    USERNAME_ERROR(502,"user name not existed"),
+    USERNAME_ERROR(502,"user name Error"),
     PASSWORD_ERROR(503,"user password error" ),
     NOTLOGIN(504, "not log in"),
-    USERNAME_USED(505, "user name used"),
-    PROCESS_ERROR(506, "process error");
+    PASSWORD_UNQUALIFY(505,"Password_Unqualify"),
+    PROCESS_ERROR(506, "process error"),
+    STUDEN_ID_UNQUALIFY(507,"StudenId Unqualify"),
+    USERNAME_USED(508, "UserName Used");
     private Integer code;
     private String message;
     private ResultCodeEnum(Integer code, String message) {
